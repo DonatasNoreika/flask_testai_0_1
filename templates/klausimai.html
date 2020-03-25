@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if visi_klausimai %}
+{% for klausimas in visi_klausimai %}
+<hr>
+<p>{{klausimas.klausimas}}</p>
+<p>{{klausimas.pirmas_atsakymas}}</p>
+<p>{{klausimas.antras_atsakymas}}</p>
+<p>{{klausimas.trecias_atsakymas}}</p>
+<a href="{{ url_for('istrinti_klausima', id=klausimas['id']) }}">Ištrinti</a>
+{% endfor %}
+{% endif %}
+<hr>
+<p><a href="{{ url_for('naujas_klausimas')}}">Naujas Klausimas</a></p>
+
+{% endblock %}

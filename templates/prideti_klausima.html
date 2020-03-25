@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<form method="post" action="#">
+    {{ form.hidden_tag() }}
+    <div class="form-group">
+        {{ form.klausimas.label(class="form-control-label") }}
+        {{ form.klausimas(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.pirmas_atsakymas.label(class="form-control-label") }}
+        {{ form.pirmas_atsakymas(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.antras_atsakymas.label(class="form-control-label") }}
+        {{ form.antras_atsakymas(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.trecias_atsakymas.label(class="form-control-label") }}
+        {{ form.trecias_atsakymas(class="form-control") }}
+    </div>
+    {{ form.submit }}
+</form>
+{% endblock %}

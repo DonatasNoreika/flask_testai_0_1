@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if aktyvus_klausimas %}
+<form method="post" action="#">
+{{ form.hidden_tag() }}
+<p>{{aktyvus_klausimas.klausimas}}</p>
+<div class="form-group">
+    {{aktyvus_klausimas.pirmas_atsakymas}}
+    {{ form.pirmas_atsakymas(class="form-control") }}
+</div>
+<div class="form-group">
+    {{aktyvus_klausimas.antras_atsakymas}}
+    {{ form.antras_atsakymas(class="form-control") }}
+</div>
+<div class="form-group">
+    {{aktyvus_klausimas.trecias_atsakymas}}
+    {{ form.trecias_atsakymas(class="form-control") }}
+</div>
+    {{ form.submit }}
+</form>
+{% endif %}
+{% endblock %}
