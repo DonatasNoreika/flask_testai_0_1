@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, redirect, url_for
+from flask import Flask, render_template, redirect, url_for, request
 from flask_sqlalchemy import SQLAlchemy
 import forms
 
@@ -52,23 +52,21 @@ def naujas_klausimas():
         return redirect(url_for('klausimai'))
     return render_template("prideti_klausima.html", form=forma)
 
-@app.route("/testas", methods=["GET", "POST"])
+@app.route("/testas")
 @app.route("/testas/<int:klausimo_id>", methods=["GET", "POST"])
-def testas(klausimo_id=0):
+def testas(klausimo_id=1):
     db.create_all()
     forma = forms.TestasForm()
-    klausimo_id += 1
-    print(klausimo_id)
-    if klausimo_id <= len(Klausimas.query.all()):
-        aktyvus_klausimas = Klausimas.query.get(klausimo_id)
-        if forma.validate_on_submit():
-            print("Submit")
-            atsakymas = Atsakymas(klausimo_id=aktyvus_klausimas.id, pirmas_atsakymas=forma.pirmas_atsakymas.data, antras_atsakymas=forma.antras_atsakymas.data, trecias_atsakymas=forma.trecias_atsakymas.data)
-            db.session.add(atsakymas)
-            db.session.commit()
-            return render_template("testas.html", form=forma, aktyvus_klausimas=aktyvus_klausimas)
-    else:
-        return "Testas baigtas"
+    aktyvus_klausimas = Klausimas.query.get(klausimo_id)
+    if forma.validate_on_submit():
+        atsakymas = Atsakymas(klausimo_id=aktyvus_klausimas.id, pirmas_atsakymas=forma.pirmas_atsakymas.data, antras_atsakymas=forma.antras_atsakymas.data, trecias_atsakymas=forma.trecias_atsakymas.data)
+        db.session.add(atsakymas)
+        db.session.commit()
+        if klausimo_id < len(Klausimas.query.all()):
+            sekantis_klausimas = Klausimas.query.get(klausimo_id +1)
+            return render_template("testas.html", form=forma, aktyvus_klausimas=sekantis_klausimas)
+        else:
+            return "Testas baigtas"
     return render_template("testas.html", form=forma, aktyvus_klausimas=aktyvus_klausimas)
 
 @app.route("/istrinti_klausima/<int:id>")
