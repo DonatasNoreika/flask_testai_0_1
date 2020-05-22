@@ -58,9 +58,11 @@ def testas(klausimo_id=0):
     db.create_all()
     forma = forms.TestasForm()
     klausimo_id += 1
+    print(klausimo_id)
     if klausimo_id <= len(Klausimas.query.all()):
         aktyvus_klausimas = Klausimas.query.get(klausimo_id)
-        if forma.submit():
+        if forma.validate_on_submit():
+            print("Submit")
             atsakymas = Atsakymas(klausimo_id=aktyvus_klausimas.id, pirmas_atsakymas=forma.pirmas_atsakymas.data, antras_atsakymas=forma.antras_atsakymas.data, trecias_atsakymas=forma.trecias_atsakymas.data)
             db.session.add(atsakymas)
             db.session.commit()
