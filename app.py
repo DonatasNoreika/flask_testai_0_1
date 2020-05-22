@@ -29,11 +29,9 @@ class Atsakymas(db.Model):
     antras_atsakymas = db.Column("2 atsakymas", db.Boolean)
     trecias_atsakymas = db.Column("3 atsakymas", db.Boolean)
 
-klausimo_numeris = 0
-
 @app.route("/")
 def index():
-    return klausimai()
+    return render_template("index.html")
 
 @app.route("/klausimai")
 def klausimai():
@@ -55,20 +53,19 @@ def naujas_klausimas():
     return render_template("prideti_klausima.html", form=forma)
 
 @app.route("/testas", methods=["GET", "POST"])
-def testas():
+@app.route("/testas/<int:klausimo_id>", methods=["GET", "POST"])
+def testas(klausimo_id=0):
     db.create_all()
     forma = forms.TestasForm()
-    global klausimo_numeris
-    klausimo_numeris += 1
-    if klausimo_numeris <= len(Klausimas.query.all()):
-        aktyvus_klausimas = Klausimas.query.get(klausimo_numeris)
+    klausimo_id += 1
+    if klausimo_id <= len(Klausimas.query.all()):
+        aktyvus_klausimas = Klausimas.query.get(klausimo_id)
         if forma.submit():
             atsakymas = Atsakymas(klausimo_id=aktyvus_klausimas.id, pirmas_atsakymas=forma.pirmas_atsakymas.data, antras_atsakymas=forma.antras_atsakymas.data, trecias_atsakymas=forma.trecias_atsakymas.data)
             db.session.add(atsakymas)
             db.session.commit()
             return render_template("testas.html", form=forma, aktyvus_klausimas=aktyvus_klausimas)
     else:
-        klausimo_numeris = 0
         return "Testas baigtas"
     return render_template("testas.html", form=forma, aktyvus_klausimas=aktyvus_klausimas)
 

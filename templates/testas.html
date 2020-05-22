@@ -3,7 +3,7 @@
 {% block content %}
 
 {% if aktyvus_klausimas %}
-<form method="post" action="#">
+<form method="post" action="{{ url_for('testas', klausimo_id=aktyvus_klausimas.id) }}">
 {{ form.hidden_tag() }}
 <p>{{aktyvus_klausimas.klausimas}}</p>
 <div class="form-group">
